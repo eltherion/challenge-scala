@@ -135,7 +135,9 @@ class TaskServiceImplTest extends AsyncFunSpec with Matchers {
         testedImplementation = new TaskServiceImpl(tasks, StatsComposerImpl)
         tasksStats          <- testedImplementation.getStats(taskId)
         _                   <- testedImplementation.updateTask(taskId, TaskState.Canceled)
-        message             <- tasksStats.fold[IO[Message]](IO(fail())) { statsFlow => IO.fromFuture(IO(statsFlow.runWith(Sink.head))) }
+        message             <- tasksStats.fold[IO[Message]](IO(fail())) { statsFlow =>
+                                 IO.fromFuture(IO(statsFlow.runWith(Sink.head)))
+                               }
       } yield message.asTextMessage.getStrictText shouldBe
         s"""{
            |  "avgLinesPerSec": 0,
