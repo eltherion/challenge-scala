@@ -1,7 +1,7 @@
 package pl.datart.csvtojson.service
 
+import nl.grons.metrics4.scala.DefaultInstrumented
 import pl.datart.csvtojson.model._
-import pl.datart.csvtojson.service.Metrics.metrics
 
 import java.time.temporal.ChronoUnit._
 import java.util.Date
@@ -10,7 +10,7 @@ trait StatsComposer {
   def createReport(task: Task): TaskStats
 }
 
-object StatsComposerImpl extends StatsComposer {
+object StatsComposerImpl extends StatsComposer with DefaultInstrumented {
   override def createReport(task: Task): TaskStats = {
     TaskStats(
       linesProcessed = metrics.counter(task.taskId.taskId).count,
